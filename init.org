@@ -1,0 +1,20 @@
+#+TITLE: Paweł Bartkiewicz's Emacs configuration
+#+STARTUP: showeverything
+
+* About this file
+
+After many years of creating new =init.el= files from scratch on each machine I used (because old
+ones somehow weren't portable and were so degenerate I didn't want to fix them) I finally decided
+to organise my Emacs configuration properly. This is the result. It is heavily influenced by
+[[https://github.com/sachac/.emacs.d/][Sacha Chua's Org mode-based .emacs.d]]. This is also my first foray into literate programming using
+[[https://orgmode.org][Org mode]]. Even if not useful to anyone else, I do hope it will help me remember the purpose of each
+elisp snippet I add here.
+
+I'm starting by creating an almost empty Org file and keeping my old config as =legacy.el=.
+I will slowly move code here over time.
+
+* Load =legacy.el=
+
+#+BEGIN_SRC emacs-lisp :tangle yes
+  (load "~/.emacs.d/legacy.el")
+#+END_SRC

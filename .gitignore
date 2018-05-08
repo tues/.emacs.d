@@ -1,0 +1,12 @@
+*~
+/init.el
+/init.html
+/legacy.el
+
+/auto-save-list/
+/bookmarks
+/elpa/
+/ido.last
+/places
+/projectile-bookmarks.eld
+/recentf
