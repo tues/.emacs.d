@@ -1,5 +1,5 @@
-#+TITLE: Paweł Bartkiewicz's Emacs configuration
-#+STARTUP: showeverything
+#+title: Paweł Bartkiewicz's Emacs configuration
+#+startup: showeverything
 
 * About this file
 
@@ -15,6 +15,6 @@ I will slowly move code here over time.
 
 * Load =legacy.el=
 
-#+BEGIN_SRC emacs-lisp :tangle yes
+#+begin_src emacs-lisp :tangle yes
   (load "~/.emacs.d/legacy.el")
-#+END_SRC
+#+end_src
