@@ -13,6 +13,15 @@ elisp snippet I add here.
 I'm starting by creating an almost empty Org file and keeping my old config as =legacy.el=.
 I will slowly move code here over time.
 
+* Header
+
+Make sure we're using UTF-8. Also set Org's =:padline= to =no= here to avoid generating an empty
+line at the beginning of the file (who would ever want to begin a file with an empty line?!).
+
+#+begin_src emacs-lisp :tangle yes :padline no
+  ;; -*- coding: utf-8 -*-
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
