@@ -62,6 +62,16 @@ screen (at least one)!
 
  - [ ] Do this only for X. Doesn't make sense in console.
 
+** Customisations
+
+I don't want Emacs to automatically save customised variables in my =init.el=, because they will
+be overriden by =org-babel-tangle=. Let's use a separate file (=custom.el=) instead.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq custom-file "~/.emacs.d/custom.el")
+  (load custom-file)
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
