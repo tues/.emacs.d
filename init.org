@@ -40,6 +40,15 @@ The startup screen is nice, but I don't need it.
   (setq inhibit-startup-screen t)
 #+end_src
 
+** Security
+
+Never use unsafe file local variables, especially =eval=.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq enable-local-variables :safe
+        enable-local-eval nil)
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
