@@ -49,6 +49,19 @@ Never use unsafe file local variables, especially =eval=.
         enable-local-eval nil)
 #+end_src
 
+** Appearance
+
+*** TODO Always start maximised [0/1]
+
+Emacs is the most important thing I run on my computer. Of course I want it to occupy my whole
+screen (at least one)!
+
+#+begin_src emacs-lisp :tangle yes
+  (toggle-frame-maximized)
+#+end_src
+
+ - [ ] Do this only for X. Doesn't make sense in console.
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
