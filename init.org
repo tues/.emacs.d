@@ -22,6 +22,24 @@ line at the beginning of the file (who would ever want to begin a file with an e
   ;; -*- coding: utf-8 -*-
 #+end_src
 
+* Basic settings
+
+** Remove visual clutter
+
+I don't want all this clutter. Disable tool bars, menu bars and scroll bars.
+
+#+begin_src emacs-lisp :tangle yes
+  (tool-bar-mode -1)
+  (menu-bar-mode -1)
+  (scroll-bar-mode -1)
+#+end_src
+
+The startup screen is nice, but I don't need it.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq inhibit-startup-screen t)
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
