@@ -72,6 +72,15 @@ be overriden by =org-babel-tangle=. Let's use a separate file (=custom.el=) inst
   (load custom-file)
 #+end_src
 
+** Package
+
+Load and activate packages. If we don't include this line in our =init.el=, =package.el= will do
+that for us automatically.
+
+#+begin_src emacs-lisp :tangle yes
+  (package-initialize)
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
