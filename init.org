@@ -74,10 +74,10 @@ be overriden by =org-babel-tangle=. Let's use a separate file (=custom.el=) inst
 
 ** Package
 
-Load and activate packages. If we don't include this line in our =init.el=, =package.el= will do
-that for us automatically.
+Load and activate =package.el=.
 
 #+begin_src emacs-lisp :tangle yes
+  (require 'package)
   (package-initialize)
 #+end_src
 
