@@ -113,6 +113,16 @@ Always install packages if they are not installed yet.
   (use-package scala-mode)
 #+end_src
 
+*** Disable double indentation
+
+=scala-mode= indents =extends=, =with= and =forSome= with an additional step. I don't want this.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq scala-indent:double-indent-re
+    (concat (regexp-opt '() 'words)
+            "\\|:\\("  scala-syntax:after-reserved-symbol-re "\\)"))
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
