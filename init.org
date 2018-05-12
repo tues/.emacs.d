@@ -87,6 +87,24 @@ Load and activate =package.el=. Add some repositories (only =gnu= is available b
   (package-initialize)
 #+end_src
 
+*** Use-package
+
+Install =use-package= if needed and load it. It makes installing dependencies easier.
+
+#+begin_src emacs-lisp :tangle yes
+  (when (not package-archive-contents)
+    (package-refresh-contents)
+    (package-install 'use-package))
+
+  (require 'use-package)
+#+end_src
+
+Always install packages if they are not installed yet.
+
+#+begin_src emacs-lisp :tangle yes
+  (setq use-package-always-ensure t)
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
