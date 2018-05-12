@@ -74,10 +74,16 @@ be overriden by =org-babel-tangle=. Let's use a separate file (=custom.el=) inst
 
 ** Package
 
-Load and activate =package.el=.
+Load and activate =package.el=. Add some repositories (only =gnu= is available by default).
 
 #+begin_src emacs-lisp :tangle yes
   (require 'package)
+
+  (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
+                           ("org" . "http://orgmode.org/elpa/")
+                           ("melpa" . "https://melpa.org/packages/")
+                           ("melpa-stable" . "https://stable.melpa.org/packages/")))
+
   (package-initialize)
 #+end_src
 
