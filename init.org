@@ -105,6 +105,14 @@ Always install packages if they are not installed yet.
   (setq use-package-always-ensure t)
 #+end_src
 
+* Scala
+
+** Scala-mode
+
+#+begin_src emacs-lisp :tangle yes
+  (use-package scala-mode)
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
