@@ -1,5 +1,6 @@
 #+title: Paweł Bartkiewicz's Emacs configuration
 #+startup: showeverything
+#+property: header-args:emacs-lisp :tangle yes
 
 * About this file
 
@@ -18,7 +19,7 @@ I will slowly move code here over time.
 Make sure we're using UTF-8. Also set Org's =:padline= to =no= here to avoid generating an empty
 line at the beginning of the file (who would ever want to begin a file with an empty line?!).
 
-#+begin_src emacs-lisp :tangle yes :padline no
+#+begin_src emacs-lisp :padline no
   ;; -*- coding: utf-8 -*-
 #+end_src
 
@@ -28,7 +29,7 @@ line at the beginning of the file (who would ever want to begin a file with an e
 
 I don't want all this clutter. Disable tool bars, menu bars and scroll bars.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (tool-bar-mode -1)
   (menu-bar-mode -1)
   (scroll-bar-mode -1)
@@ -36,7 +37,7 @@ I don't want all this clutter. Disable tool bars, menu bars and scroll bars.
 
 The startup screen is nice, but I don't need it.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (setq inhibit-startup-screen t)
 #+end_src
 
@@ -44,7 +45,7 @@ The startup screen is nice, but I don't need it.
 
 Never use unsafe file local variables, especially =eval=.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (setq enable-local-variables :safe
         enable-local-eval nil)
 #+end_src
@@ -56,7 +57,7 @@ Never use unsafe file local variables, especially =eval=.
 Emacs is the most important thing I run on my computer. Of course I want it to occupy my whole
 screen (at least one)!
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (toggle-frame-maximized)
 #+end_src
 
@@ -67,7 +68,7 @@ screen (at least one)!
 I don't want Emacs to automatically save customised variables in my =init.el=, because they will
 be overriden by =org-babel-tangle=. Let's use a separate file (=custom.el=) instead.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (setq custom-file "~/.emacs.d/custom.el")
   (load custom-file)
 #+end_src
@@ -76,7 +77,7 @@ be overriden by =org-babel-tangle=. Let's use a separate file (=custom.el=) inst
 
 Load and activate =package.el=. Add some repositories (only =gnu= is available by default).
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (require 'package)
 
   (setq package-archives '(("gnu" . "http://elpa.gnu.org/packages/")
@@ -91,7 +92,7 @@ Load and activate =package.el=. Add some repositories (only =gnu= is available b
 
 Install =use-package= if needed and load it. It makes installing dependencies easier.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (when (not package-archive-contents)
     (package-refresh-contents)
     (package-install 'use-package))
@@ -101,7 +102,7 @@ Install =use-package= if needed and load it. It makes installing dependencies ea
 
 Always install packages if they are not installed yet.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (setq use-package-always-ensure t)
 #+end_src
 
@@ -109,7 +110,7 @@ Always install packages if they are not installed yet.
 
 ** Scala-mode
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (use-package scala-mode)
 #+end_src
 
@@ -117,7 +118,7 @@ Always install packages if they are not installed yet.
 
 =scala-mode= indents =extends=, =with= and =forSome= with an additional step. I don't want this.
 
-#+begin_src emacs-lisp :tangle yes
+#+begin_src emacs-lisp
   (setq scala-indent:double-indent-re
     (concat (regexp-opt '() 'words)
             "\\|:\\("  scala-syntax:after-reserved-symbol-re "\\)"))
