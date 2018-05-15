@@ -73,6 +73,15 @@ be overriden by =org-babel-tangle=. Let's use a separate file (=custom.el=) inst
   (load custom-file)
 #+end_src
 
+** Scrolling
+
+Stop that annoying error when scrolling would result in cursor moving beyond buffer's boundaries.
+Scroll to the top or bottom of the buffer instead.
+
+#+begin_src emacs-lisp
+  (setq scroll-error-top-bottom t)
+#+end_src
+
 ** Package
 
 Load and activate =package.el=. Add some repositories (only =gnu= is available by default).
