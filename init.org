@@ -82,6 +82,12 @@ Scroll to the top or bottom of the buffer instead.
   (setq scroll-error-top-bottom t)
 #+end_src
 
+When scrolling with =M-v= and =C-v= keep 5 lines of context visible (default is 2).
+
+#+begin_src emacs-lisp
+  (setq next-screen-context-lines 5)
+#+end_src
+
 ** Package
 
 Load and activate =package.el=. Add some repositories (only =gnu= is available by default).
