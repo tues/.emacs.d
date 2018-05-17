@@ -88,6 +88,29 @@ When scrolling with =M-v= and =C-v= keep 5 lines of context visible (default is 
   (setq next-screen-context-lines 5)
 #+end_src
 
+** Show buffer boundaries
+
+Display some symbols in windows' left fringes indicating where buffers start and end.
+
+#+begin_src emacs-lisp
+  (setq-default indicate-buffer-boundaries 'left
+                indicate-empty-lines +1)
+#+end_src
+
+** Show whitespace
+
+#+begin_src emacs-lisp
+  (require 'whitespace)
+  (global-whitespace-mode t)
+#+end_src
+
+Too much noise by default, we only want to see whitespace which shouldn't be there (like tabs and
+lines which contain only spaces).
+
+#+begin_src emacs-lisp
+  (setq whitespace-style (quote (face tabs trailing space-before-tab empty space-after-tab tab-mark)))
+#+end_src
+
 ** Package
 
 Load and activate =package.el=. Add some repositories (only =gnu= is available by default).
