@@ -73,6 +73,15 @@ be overriden by =org-babel-tangle=. Let's use a separate file (=custom.el=) inst
   (load custom-file)
 #+end_src
 
+** Save last visited place
+
+Automatically save last place visited in each file.
+
+#+begin_src emacs-lisp
+  (require 'saveplace)
+  (save-place-mode t)
+#+end_src
+
 ** Scrolling
 
 Stop that annoying error when scrolling would result in cursor moving beyond buffer's boundaries.
