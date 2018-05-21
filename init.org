@@ -160,6 +160,24 @@ Always install packages if they are not installed yet.
   (projectile-global-mode)
 #+end_src
 
+** Perspective
+
+#+begin_src emacs-lisp
+  (use-package perspective)
+  (persp-mode)
+#+end_src
+
+*** Selected perspective face
+
+By default, =persp-selected-face= uses an ugly blue colour and no themes seem to override it,
+so let's forcefully set foreground colour to =nil=, but make the face bold.
+
+#+begin_src emacs-lisp
+  (set-face-attribute 'persp-selected-face nil
+                      :foreground nil
+                      :weight 'bold)
+#+end_src
+
 * Scala
 
 ** Scala-mode
