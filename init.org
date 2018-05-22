@@ -178,6 +178,12 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
                       :weight 'bold)
 #+end_src
 
+*** Integration with Projectile
+
+#+begin_src emacs-lisp
+  (use-package persp-projectile)
+#+end_src
+
 * Scala
 
 ** Scala-mode
