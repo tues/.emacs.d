@@ -153,6 +153,14 @@ Always install packages if they are not installed yet.
   (setq use-package-always-ensure t)
 #+end_src
 
+** IDO
+
+#+begin_src emacs-lisp
+  (use-package ido)
+  (ido-mode)
+  (ido-everywhere)
+#+end_src
+
 ** Projectile
 
 #+begin_src emacs-lisp
