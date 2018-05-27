@@ -192,6 +192,13 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
   (use-package persp-projectile)
 #+end_src
 
+** Avy
+
+#+begin_src emacs-lisp
+  (use-package avy)
+  (global-set-key (kbd "C-;") 'avy-goto-char-2)
+#+end_src
+
 * Scala
 
 ** Scala-mode
