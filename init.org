@@ -192,6 +192,20 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
   (use-package persp-projectile)
 #+end_src
 
+** CRUX
+
+"A Collection of Ridiculously Useful eXtensions".
+
+#+begin_src emacs-lisp
+  (use-package crux)
+#+end_src
+
+*** Transpose windows
+
+#+begin_src emacs-lisp
+  (global-set-key (kbd "C-x 4 t") 'crux-transpose-windows)
+#+end_src
+
 ** Avy
 
 #+begin_src emacs-lisp
