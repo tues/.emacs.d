@@ -213,6 +213,22 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
   (global-set-key (kbd "C-;") 'avy-goto-char-2)
 #+end_src
 
+* Git
+
+#+begin_src emacs-lisp
+  (use-package magit
+    :commands magit-status magit-diff-buffer-file magit-log magit-blame
+    :init (setq magit-revert-buffers nil)
+    :bind (("C-c C-g s" . magit-status)
+           ("C-c C-g d" . magit-diff-buffer-file)
+           ("C-c C-g l" . magit-log)
+           ("C-c C-g b" . magit-blame)))
+#+end_src
+
+** TODO
+ [ ] =magit-revert-buffers= is deprecated. Check alternatives and set something safe but more
+convenient than =nil=.
+
 * Scala
 
 ** Scala-mode
