@@ -229,6 +229,36 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
  [ ] =magit-revert-buffers= is deprecated. Check alternatives and set something safe but more
 convenient than =nil=.
 
+* Org
+
+#+begin_src emacs-lisp
+  (use-package org)
+#+end_src
+
+** =org-store-link=
+
+Handy when creating notes about some part of a program in an organised way.
+=C-c l= to store current location, switch to an Org buffer, =C-c C-l= to paste the link.
+
+#+begin_src emacs-lisp
+  (require 'org)
+
+  (global-set-key (kbd "C-c l") 'org-store-link)
+#+end_src
+
+** =org-capture=
+
+This, on the other hand, is useful for taking notes at any time without interrupting your normal
+workflow: =C-c c=, choose a template, note something down, =C-c C-c= to save the note to
+=~/org/notes.org= and go back to where you left. You can later go to your =notes.org= file and
+hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
+
+#+begin_src emacs-lisp
+  (setq org-default-notes-file (concat org-directory "/notes.org"))
+
+  (global-set-key (kbd "C-c c") 'org-capture)
+#+end_src
+
 * Scala
 
 ** Scala-mode
