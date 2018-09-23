@@ -259,6 +259,12 @@ hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
   (global-set-key (kbd "C-c c") 'org-capture)
 #+end_src
 
+** =org-reveal=
+
+#+begin_src emacs-lisp
+  (use-package ox-reveal)
+#+end_src
+
 * Scala
 
 ** Scala-mode
