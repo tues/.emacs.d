@@ -168,6 +168,13 @@ Always install packages if they are not installed yet.
   (projectile-global-mode)
 #+end_src
 
+Since version 1.1, Projectile no longer sets =C-c p= as the default prefix, so we need to do
+this manually:
+
+#+BEGIN_SRC emacs-lisp
+  (define-key projectile-mode-map (kbd "C-c p") 'projectile-command-map)
+#+END_SRC
+
 ** Perspective
 
 #+begin_src emacs-lisp
