@@ -290,6 +290,12 @@ hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
             "\\|:\\("  scala-syntax:after-reserved-symbol-re "\\)"))
 #+end_src
 
+** Ensime
+
+#+begin_src emacs-lisp
+  (use-package ensime)
+#+end_src
+
 * Load =legacy.el=
 
 #+begin_src emacs-lisp :tangle yes
