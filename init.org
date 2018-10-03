@@ -272,6 +272,12 @@ hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
   (use-package ox-reveal)
 #+end_src
 
+* Htmlize
+
+#+BEGIN_SRC emacs-lisp
+  (use-package htmlize)
+#+END_SRC
+
 * Scala
 
 ** Scala-mode
