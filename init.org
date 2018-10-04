@@ -306,6 +306,15 @@ hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
             "\\|:\\("  scala-syntax:after-reserved-symbol-re "\\)"))
 #+end_src
 
+*** Scaladoc indentation style
+
+Use javadoc indentation style instead (all asterisks aligned to the first one).
+
+#+BEGIN_SRC emacs-lisp
+  (custom-set-variables
+   '(scala-indent:use-javadoc-style t))
+#+END_SRC
+
 ** Ensime
 
 #+begin_src emacs-lisp
