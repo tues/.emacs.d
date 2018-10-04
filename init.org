@@ -272,6 +272,16 @@ hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
   (use-package ox-reveal)
 #+end_src
 
+* Emojis
+
+** Emojify
+
+#+begin_src emacs-lisp
+  (use-package emojify)
+
+  (global-set-key (kbd "C-c e") 'emojify-insert-emoji)
+#+end_src
+
 * Htmlize
 
 #+BEGIN_SRC emacs-lisp
