@@ -288,6 +288,19 @@ hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
   (use-package htmlize)
 #+END_SRC
 
+* Communication helpers
+
+** Copy as format
+
+Format selected code region as a snippet ready for pasting.
+
+#+BEGIN_SRC emacs-lisp
+  (use-package copy-as-format)
+  (global-set-key (kbd "C-c w s") 'copy-as-format-slack)
+  (global-set-key (kbd "C-c w g") 'copy-as-format-gitlab)
+  (global-set-key (kbd "C-c w j") 'copy-as-format-jira)
+#+END_SRC
+
 * Scala
 
 ** Scala-mode
