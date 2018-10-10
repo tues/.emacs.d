@@ -301,6 +301,23 @@ Format selected code region as a snippet ready for pasting.
   (global-set-key (kbd "C-c w j") 'copy-as-format-jira)
 #+END_SRC
 
+** Git link
+
+Copy link to current file/line from a Git repository. For private servers we need to configure
+=git-link-remote-alist= and =git-link-commit-remote-alist= (see example below).
+
+#+BEGIN_SRC emacs-lisp
+  (use-package git-link)
+  (global-set-key (kbd "C-c C-g C-l") 'git-link)
+
+  ;; (eval-after-load 'git-link
+  ;;   '(progn
+  ;;      (add-to-list 'git-link-remote-alist
+  ;;                   '("git\\.example\\.com" git-link-gitlab))
+  ;;      (add-to-list 'git-link-commit-remote-alist
+  ;;                   '("git\\.example\\.com" git-link-commit-gitlab))))
+#+END_SRC
+
 * Scala
 
 ** Scala-mode
