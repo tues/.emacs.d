@@ -11,9 +11,6 @@ to organise my Emacs configuration properly. This is the result. It is heavily i
 [[https://orgmode.org][Org mode]]. Even if not useful to anyone else, I do hope it will help me remember the purpose of each
 elisp snippet I add here.
 
-I'm starting by creating an almost empty Org file and keeping my old config as =legacy.el=.
-I will slowly move code here over time.
-
 * Header
 
 Make sure we're using UTF-8. Also set Org's =:padline= to =no= here to avoid generating an empty
@@ -106,6 +103,12 @@ Display some symbols in windows' left fringes indicating where buffers start and
                 indicate-empty-lines +1)
 #+end_src
 
+** Never insert tabs
+
+#+begin_src emacs-lisp
+  (setq-default indent-tabs-mode nil)
+#+end_src
+
 ** Show whitespace
 
 #+begin_src emacs-lisp
@@ -118,6 +121,30 @@ lines which contain only spaces).
 
 #+begin_src emacs-lisp
   (setq whitespace-style (quote (face tabs trailing space-before-tab empty space-after-tab tab-mark)))
+#+end_src
+
+Disable showing whitespace for some specific major modes, e.g. the ones used by Magit:
+
+#+begin_src emacs-lisp
+  (setq global-whitespace-modes '(not magit-mode magit-status-mode magit-revision-mode magit-diff-mode))
+#+end_src
+
+** Enable advanced commands
+
+#+begin_src emacs-lisp
+  (put 'downcase-region 'disabled nil)
+  (put 'upcase-region 'disabled nil)
+  (put 'narrow-to-region 'disabled nil)
+  (put 'set-goal-column 'disabled nil)
+  (put 'magit-diff-edit-hunk-commit 'disabled nil)
+  (put 'magit-edit-line-commit 'disabled nil)
+#+end_src
+
+Not sure about these, so keep them disabled:
+
+#+begin_src emacs-lisp
+  ;(put 'magit-clean 'disabled nil)
+  ;(put 'dired-find-alternate-file 'disabled nil)
 #+end_src
 
 ** Package
@@ -161,10 +188,42 @@ Always install packages if they are not installed yet.
   (ido-everywhere)
 #+end_src
 
+*** Vertical
+
+#+begin_src emacs-lisp
+  (use-package ido-vertical-mode)
+  (ido-vertical-mode 1)
+  (setq ido-vertical-define-keys 'C-n-and-C-p-only)
+#+end_src
+
+*** Flex matching
+
+#+begin_src emacs-lisp
+  (setq ido-enable-flex-matching t)
+#+end_src
+
+**** =flx=
+
+This makes flex matching much better:
+
+#+begin_src emacs-lisp
+  (use-package flx-ido)
+  (flx-ido-mode 1)
+  (setq ido-use-faces nil)
+#+end_src
+
+*** =ido-completing-read+=
+
+#+begin_src emacs-lisp
+  (use-package ido-completing-read+)
+  (ido-ubiquitous-mode 1)
+#+end_src
+
 ** Projectile
 
 #+begin_src emacs-lisp
-  (use-package projectile)
+  (use-package projectile
+    :init (setq projectile-use-git-grep t))
   (projectile-global-mode)
 #+end_src
 
@@ -199,6 +258,22 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
   (use-package persp-projectile)
 #+end_src
 
+** Company
+
+#+begin_src emacs-lisp
+  (use-package company
+    :init (global-company-mode)
+    :commands company-indent-or-complete-common
+    :bind (("TAB" . company-indent-or-complete-common)))
+#+end_src
+
+** Yasnippet
+
+#+begin_src emacs-lisp
+  (use-package yasnippet
+    :init (yas-global-mode 1))
+#+end_src
+
 ** CRUX
 
 "A Collection of Ridiculously Useful eXtensions".
@@ -220,6 +295,25 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
   (global-set-key (kbd "C-;") 'avy-goto-char-2)
 #+end_src
 
+* Mode-line
+
+** Minions
+
+Replace minor mode list with an expandable menu:
+
+#+begin_src emacs-lisp
+  (use-package minions)
+  (minions-mode)
+#+end_src
+
+** Moody
+
++Display fancy tabs and ribbons+:
+
+#+begin_src emacs-lisp
+  ;;(use-package moody)
+#+end_src
+
 * Git
 
 #+begin_src emacs-lisp
@@ -230,6 +324,12 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
            ("C-c C-g d" . magit-diff-buffer-file)
            ("C-c C-g l" . magit-log)
            ("C-c C-g b" . magit-blame)))
+#+end_src
+
+** Use IDO for completion
+
+#+begin_src emacs-lisp
+  (setq magit-completing-read-function 'magit-ido-completing-read)
 #+end_src
 
 ** TODO
@@ -271,6 +371,31 @@ hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
 #+begin_src emacs-lisp
   (use-package ox-reveal)
 #+end_src
+
+* CSV
+
+#+begin_src emacs-lisp
+  (use-package csv-mode)
+#+end_src
+
+* Expand region
+
+#+BEGIN_SRC emacs-lisp
+  (use-package expand-region)
+  (global-set-key (kbd "C-\"") 'er/expand-region)
+#+END_SRC
+
+* Multiple cursors
+
+#+BEGIN_SRC emacs-lisp
+   (use-package multiple-cursors)
+   (global-set-key (kbd "C-S-c C-S-r") 'mc/edit-lines)
+   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
+   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
+   (global-set-key (kbd "C-S-c C-S-a") 'mc/mark-all-like-this)
+   (global-set-key (kbd "C-S-c C-S-c") 'mc/mark-all-dwim)
+   (define-key mc/keymap (kbd "<return>") nil)
+#+END_SRC
 
 * Emojis
 
@@ -318,6 +443,19 @@ Copy link to current file/line from a Git repository. For private servers we nee
   ;;                   '("git\\.example\\.com" git-link-commit-gitlab))))
 #+END_SRC
 
+* Markdown
+
+** Markdown-mode
+
+#+begin_src emacs-lisp
+  (use-package markdown-mode
+    :ensure t
+    :mode (("README\\.md\\'" . gfm-mode)
+           ("\\.md\\'" . markdown-mode)
+           ("\\.markdown\\'" . markdown-mode))
+    :init (setq markdown-command "markdown"))
+#+end_src
+
 * Scala
 
 ** Scala-mode
@@ -330,10 +468,12 @@ Copy link to current file/line from a Git repository. For private servers we nee
 
 =scala-mode= indents =extends=, =with= and =forSome= with an additional step. I don't want this.
 
+However, in this project I need this, so commenting out this part...
+
 #+begin_src emacs-lisp
-  (setq scala-indent:double-indent-re
-    (concat (regexp-opt '() 'words)
-            "\\|:\\("  scala-syntax:after-reserved-symbol-re "\\)"))
+  ;; (setq scala-indent:double-indent-re
+  ;;   (concat (regexp-opt '() 'words)
+  ;;           "\\|:\\("  scala-syntax:after-reserved-symbol-re "\\)"))
 #+end_src
 
 *** Scaladoc indentation style
@@ -345,14 +485,81 @@ Use javadoc indentation style instead (all asterisks aligned to the first one).
    '(scala-indent:use-javadoc-style t))
 #+END_SRC
 
+*** Left gutter
+
+Enable that awful left gutter...
+
+#+begin_src emacs-lisp
+  (setq scala-indent:align-parameters t)
+#+end_src
+
 ** Ensime
 
 #+begin_src emacs-lisp
-  (use-package ensime)
+  ;;(use-package ensime)
 #+end_src
 
-* Load =legacy.el=
+** Metals
 
-#+begin_src emacs-lisp :tangle yes
-  (load "~/.emacs.d/legacy.el")
+#+begin_src emacs-lisp
+  ;; Add melpa to your packages repositories
+  ;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
+
+  ;; Enable defer and ensure by default for use-package
+  ;(setq use-package-always-defer t
+  ;      use-package-always-ensure t)
+
+  ;; Enable scala-mode and sbt-mode
+
+  (use-package scala-mode
+    :mode "\\.s\\(cala\\|bt\\)$")
+
+  (use-package sbt-mode
+    :commands sbt-start sbt-command
+    :config
+    ;; WORKAROUND: https://github.com/ensime/emacs-sbt-mode/issues/31
+    ;; allows using SPACE when in the minibuffer
+    (substitute-key-definition
+     'minibuffer-complete-word
+     'self-insert-command
+     minibuffer-local-completion-map))
+
+  ;; Enable nice rendering of diagnostics like compile errors.
+  (use-package flycheck
+    :init (global-flycheck-mode))
+
+  ;; (use-package lsp-mode
+  ;;   :init (setq lsp-prefer-flymake nil
+  ;;               lsp-file-watch-threshold 512)
+  ;;   :commands (lsp-find-references)
+  ;;   :hook (scala-mode . lsp)
+  ;;   :bind (:map lsp-mode-map
+  ;;               ("C-c f" . lsp-format-buffer)
+  ;;               ("M-?" . lsp-find-references)
+  ;;               ("C-c C-v r" . lsp-find-references)))
+
+  ;; (use-package lsp-ui
+  ;;   :hook (lsp-mode . lsp-ui-mode))
+
+  (use-package eglot
+    :pin melpa-stable
+    :init (setq eglot-autoreconnect nil)
+    :config (add-to-list 'eglot-server-programs '(scala-mode . ("metals-emacs")))
+    :config (set-face-attribute 'eglot-mode-line nil :weight 'bold :inherit nil)
+    :hook (scala-mode . eglot-ensure)
+    :bind (:map eglot-mode-map
+                ("C-c f" . eglot-format)))
+
+  ;; (use-package company-lsp
+  ;;   :commands company-lsp)
+#+end_src
+
+* To do
+
+** Case converting
+
+https://www.emacswiki.org/emacs/CamelCase
+
+#+begin_src emacs-lisp
+  ;(use-package string-inflection)
 #+end_src
