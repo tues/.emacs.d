@@ -11,6 +11,9 @@ to organise my Emacs configuration properly. This is the result. It is heavily i
 [[https://orgmode.org][Org mode]]. Even if not useful to anyone else, I do hope it will help me remember the purpose of each
 elisp snippet I add here.
 
+I'm starting by creating an almost empty Org file and keeping my old config as =legacy.el=.
+I will slowly move code here over time.
+
 * Header
 
 Make sure we're using UTF-8. Also set Org's =:padline= to =no= here to avoid generating an empty
@@ -113,7 +116,7 @@ Display some symbols in windows' left fringes indicating where buffers start and
 
 #+begin_src emacs-lisp
   (require 'whitespace)
-  (global-whitespace-mode t)
+  (global-whitespace-mode)
 #+end_src
 
 Too much noise by default, we only want to see whitespace which shouldn't be there (like tabs and
@@ -123,10 +126,27 @@ lines which contain only spaces).
   (setq whitespace-style (quote (face tabs trailing space-before-tab empty space-after-tab tab-mark)))
 #+end_src
 
-Disable showing whitespace for some specific major modes, e.g. the ones used by Magit:
+(This doesn't seem to work) Disable showing whitespace for some specific major modes, e.g. the ones used by Magit:
 
 #+begin_src emacs-lisp
   (setq global-whitespace-modes '(not magit-mode magit-status-mode magit-revision-mode magit-diff-mode))
+#+end_src
+
+https://www.reddit.com/r/emacs/comments/fmd2qo/disabling_globalwhitespacemode_in_magit_buffers/fl4o57c/
+
+#+begin_src emacs-lisp
+  (defun turn-off-whitespace-mode ()
+    "Unconditionally turn off Whitespace mode."
+    (whitespace-mode -1)
+    (setq-local whitespace-style nil))
+
+  (add-hook 'magit-section-mode-hook #'turn-off-whitespace-mode)
+#+end_src
+
+** Show column number
+
+#+begin_src emacs-lisp
+  (column-number-mode)
 #+end_src
 
 ** Enable advanced commands
@@ -219,6 +239,50 @@ This makes flex matching much better:
   (ido-ubiquitous-mode 1)
 #+end_src
 
+*** Sort files by mtime
+
+https://www.emacswiki.org/emacs/InteractivelyDoThings
+
+Disabled, see [[*Sort files by name length][Sort files by name length]].
+
+#+begin_src emacs-lisp
+  (defun ido-sort-mtime ()
+    (setq ido-temp-list
+          (sort ido-temp-list
+                (lambda (a b)
+                  (time-less-p
+                   (sixth (file-attributes (concat ido-current-directory b)))
+                   (sixth (file-attributes (concat ido-current-directory a)))))))
+    (ido-to-end  ;; move . files to end (again)
+     (delq nil (mapcar
+                (lambda (x) (and (char-equal (string-to-char x) ?.) x))
+                ido-temp-list))))
+
+  ;; (add-hook 'ido-make-file-list-hook 'ido-sort-mtime)
+  ;; (add-hook 'ido-make-dir-list-hook 'ido-sort-mtime)
+#+end_src
+
+*** Sort files by name length
+
+Use shortest candidates first so that I can always narrow the results by typing more characters.
+
+Disabled because it doesn't seem to work with =flx-ido= anyway.
+
+#+begin_src emacs-lisp
+  (defun ido-sort-name-length ()
+    (setq ido-temp-list
+          (sort ido-temp-list
+                (lambda (a b)
+                  (> (length b) (length a)))))
+    (ido-to-end  ;; move . files to end (again)
+     (delq nil (mapcar
+                (lambda (x) (and (char-equal (string-to-char x) ?.) x))
+                ido-temp-list))))
+
+  ;; (add-hook 'ido-make-file-list-hook 'ido-sort-name-length)
+  ;; (add-hook 'ido-make-dir-list-hook 'ido-sort-name-length)
+#+end_src
+
 ** Projectile
 
 #+begin_src emacs-lisp
@@ -262,16 +326,8 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
 
 #+begin_src emacs-lisp
   (use-package company
-    :init (global-company-mode)
     :commands company-indent-or-complete-common
-    :bind (("TAB" . company-indent-or-complete-common)))
-#+end_src
-
-** Yasnippet
-
-#+begin_src emacs-lisp
-  (use-package yasnippet
-    :init (yas-global-mode 1))
+    :bind (("\t" . company-indent-or-complete-common)))
 #+end_src
 
 ** CRUX
@@ -295,23 +351,10 @@ so let's forcefully set foreground colour to =nil=, but make the face bold.
   (global-set-key (kbd "C-;") 'avy-goto-char-2)
 #+end_src
 
-* Mode-line
-
-** Minions
-
-Replace minor mode list with an expandable menu:
+** Shell
 
 #+begin_src emacs-lisp
-  (use-package minions)
-  (minions-mode)
-#+end_src
-
-** Moody
-
-+Display fancy tabs and ribbons+:
-
-#+begin_src emacs-lisp
-  ;;(use-package moody)
+  (setq comint-prompt-read-only t)
 #+end_src
 
 * Git
@@ -378,25 +421,6 @@ hit =C-c C-w= to refile your notes, i.e. move them to different sections/files.
   (use-package csv-mode)
 #+end_src
 
-* Expand region
-
-#+BEGIN_SRC emacs-lisp
-  (use-package expand-region)
-  (global-set-key (kbd "C-\"") 'er/expand-region)
-#+END_SRC
-
-* Multiple cursors
-
-#+BEGIN_SRC emacs-lisp
-   (use-package multiple-cursors)
-   (global-set-key (kbd "C-S-c C-S-r") 'mc/edit-lines)
-   (global-set-key (kbd "C->") 'mc/mark-next-like-this)
-   (global-set-key (kbd "C-<") 'mc/mark-previous-like-this)
-   (global-set-key (kbd "C-S-c C-S-a") 'mc/mark-all-like-this)
-   (global-set-key (kbd "C-S-c C-S-c") 'mc/mark-all-dwim)
-   (define-key mc/keymap (kbd "<return>") nil)
-#+END_SRC
-
 * Emojis
 
 ** Emojify
@@ -443,17 +467,11 @@ Copy link to current file/line from a Git repository. For private servers we nee
   ;;                   '("git\\.example\\.com" git-link-commit-gitlab))))
 #+END_SRC
 
-* Markdown
-
-** Markdown-mode
+* Yasnippet
 
 #+begin_src emacs-lisp
-  (use-package markdown-mode
-    :ensure t
-    :mode (("README\\.md\\'" . gfm-mode)
-           ("\\.md\\'" . markdown-mode)
-           ("\\.markdown\\'" . markdown-mode))
-    :init (setq markdown-command "markdown"))
+  (use-package yasnippet)
+  (yas-global-mode t)
 #+end_src
 
 * Scala
@@ -468,12 +486,10 @@ Copy link to current file/line from a Git repository. For private servers we nee
 
 =scala-mode= indents =extends=, =with= and =forSome= with an additional step. I don't want this.
 
-However, in this project I need this, so commenting out this part...
-
 #+begin_src emacs-lisp
-  ;; (setq scala-indent:double-indent-re
-  ;;   (concat (regexp-opt '() 'words)
-  ;;           "\\|:\\("  scala-syntax:after-reserved-symbol-re "\\)"))
+  (setq scala-indent:double-indent-re
+    (concat (regexp-opt '() 'words)
+            "\\|:\\("  scala-syntax:after-reserved-symbol-re "\\)"))
 #+end_src
 
 *** Scaladoc indentation style
@@ -485,14 +501,6 @@ Use javadoc indentation style instead (all asterisks aligned to the first one).
    '(scala-indent:use-javadoc-style t))
 #+END_SRC
 
-*** Left gutter
-
-Enable that awful left gutter...
-
-#+begin_src emacs-lisp
-  (setq scala-indent:align-parameters t)
-#+end_src
-
 ** Ensime
 
 #+begin_src emacs-lisp
@@ -501,19 +509,14 @@ Enable that awful left gutter...
 
 ** Metals
 
+Based on https://scalameta.org/metals/docs/editors/emacs.html.
+
 #+begin_src emacs-lisp
-  ;; Add melpa to your packages repositories
-  ;(add-to-list 'package-archives '("melpa" . "https://melpa.org/packages/") t)
-
-  ;; Enable defer and ensure by default for use-package
-  ;(setq use-package-always-defer t
-  ;      use-package-always-ensure t)
-
-  ;; Enable scala-mode and sbt-mode
-
+  ;; Enable scala-mode for highlighting, indentation and motion commands
   (use-package scala-mode
     :mode "\\.s\\(cala\\|bt\\)$")
 
+  ;; Enable sbt mode for executing sbt commands
   (use-package sbt-mode
     :commands sbt-start sbt-command
     :config
@@ -522,36 +525,101 @@ Enable that awful left gutter...
     (substitute-key-definition
      'minibuffer-complete-word
      'self-insert-command
-     minibuffer-local-completion-map))
+     minibuffer-local-completion-map)
+     ;; sbt-supershell kills sbt-mode:  https://github.com/hvesalai/emacs-sbt-mode/issues/152
+     (setq sbt:program-options '("-Dsbt.supershell=false"))
+  )
 
   ;; Enable nice rendering of diagnostics like compile errors.
   (use-package flycheck
     :init (global-flycheck-mode))
 
-  ;; (use-package lsp-mode
-  ;;   :init (setq lsp-prefer-flymake nil
-  ;;               lsp-file-watch-threshold 512)
-  ;;   :commands (lsp-find-references)
-  ;;   :hook (scala-mode . lsp)
-  ;;   :bind (:map lsp-mode-map
-  ;;               ("C-c f" . lsp-format-buffer)
-  ;;               ("M-?" . lsp-find-references)
-  ;;               ("C-c C-v r" . lsp-find-references)))
+  (use-package lsp-mode
+    :init (setq lsp-keymap-prefix "C-c v")
+    :commands (lsp-find-references)
+    :bind (:map lsp-mode-map
+                ("C-c f" . lsp-format-buffer)
+                ("M-?" . lsp-find-references)
+                ("C-c C-v r" . lsp-find-references))
+    ;; Optional - enable lsp-mode automatically in scala files
+    :hook
+    (scala-mode . lsp)
+    (lsp-mode . lsp-lens-mode)
+    :config
+    (setq lsp-prefer-flymake nil)
+    (setq lsp-file-watch-threshold 1024)
+    (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.pants.d$")
+    (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\.pids$")
+    (add-to-list 'lsp-file-watch-ignored "[/\\\\]\\dist$")
+    )
 
-  ;; (use-package lsp-ui
-  ;;   :hook (lsp-mode . lsp-ui-mode))
+  ;; Add metals backend for lsp-mode
+  (use-package lsp-metals
+    :config
+    ;; (setq lsp-metals-pants-targets "src/scala/co/actioniq/integrations:integrations_repo-lib src/scala/co/actioniq/tools/export_writer_test/testables:integrations_repo-testables")
+    (setq lsp-metals-pants-targets "::")
+    )
 
-  (use-package eglot
-    :pin melpa-stable
-    :init (setq eglot-autoreconnect nil)
-    :config (add-to-list 'eglot-server-programs '(scala-mode . ("metals-emacs")))
-    :config (set-face-attribute 'eglot-mode-line nil :weight 'bold :inherit nil)
-    :hook (scala-mode . eglot-ensure)
-    :bind (:map eglot-mode-map
-                ("C-c f" . eglot-format)))
+  ;; (use-package eglot)
 
-  ;; (use-package company-lsp
-  ;;   :commands company-lsp)
+  ;; Enable nice rendering of documentation on hover
+  (use-package lsp-ui)
+
+  ;; lsp-mode supports snippets, but in order for them to work you need to use yasnippet
+  ;; If you don't want to use snippets set lsp-enable-snippet to nil in your lsp-mode settings
+  ;;   to avoid odd behavior with snippets and indentation
+  ;; Already enabled above.
+  ;; (use-package yasnippet)
+
+  ;; Use the Debug Adapter Protocol for running tests and debugging
+  (use-package posframe
+    ;; Posframe is a pop-up tool that must be manually installed for dap-mode
+    )
+  (use-package dap-mode
+    :hook
+    (lsp-mode . dap-mode)
+    (lsp-mode . dap-ui-mode)
+    )
+
+  ;; ;; Use the Tree View Protocol for viewing the project structure and triggering compilation
+  ;; (use-package lsp-treemacs
+  ;;   :config
+  ;;   (lsp-metals-treeview-enable nil)
+  ;;   (setq lsp-metals-treeview-show-when-views-received nil)
+  ;;   )
+#+end_src
+
+*** Workaround for interrupted regex-replace
+
+https://emacs.stackexchange.com/a/47159
+
+#+begin_src emacs-lisp
+  (defun my-query-replace-regexp ()
+    (interactive)
+    (let ((after-change-functions nil)) ; empty when executing this func
+      (call-interactively 'query-replace-regexp)))
+
+  (define-key lsp-mode-map (kbd "C-M-%") 'my-query-replace-regexp)
+#+end_src
+
+* Misc
+
+** Graphviz
+
+#+begin_src emacs-lisp
+  (use-package graphviz-dot-mode)
+#+end_src
+
+* Presenting
+
+** Global zoom
+
+Use `C-M-=` and `C-M--` to adjust the height of the `default` face, which results in everything
+getting bigger/smaller.
+
+#+begin_src emacs-lisp
+  (use-package default-text-scale)
+  (default-text-scale-mode)
 #+end_src
 
 * To do
@@ -561,5 +629,5 @@ Enable that awful left gutter...
 https://www.emacswiki.org/emacs/CamelCase
 
 #+begin_src emacs-lisp
-  ;(use-package string-inflection)
+  (use-package string-inflection)
 #+end_src
